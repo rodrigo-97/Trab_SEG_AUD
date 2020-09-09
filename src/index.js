@@ -28,17 +28,14 @@ app.get("/pessoa", async (req, res) => {
 });
 
 app.post('/incluir', async function (req, res) {
-  const senha = req.query.senha
-  // const senhaComHASH = bcrypt.hashSync(senha, salt)
   res.send(crud.incluir(req.query.nome, req.query.cpf, req.query.senha))
 });
 
 app.delete('/remover', async function (req, res) {
+  console.log(req.query.id)
   res.send(crud.remover(req.query.id));
 });
 
 app.put('/atualizar', async function (req, res) {
-  const senha = req.query.senha
-  // const senhaComHASH = bcrypt.hashSync(senha, salt)
   res.send(crud.atualizar(req.query.nome, req.query.cpf, req.query.senha, req.query.id));
 });
