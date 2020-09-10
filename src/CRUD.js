@@ -40,4 +40,11 @@ module.exports = class Crud {
     const conexao = new DB('postgres', 'localhost', 'Pessoa', 'postgres', 5433)
     return conexao
   }
+
+  async log () {
+    const db = this.conectar()
+
+    const result = await db.log()
+    return JSON.stringify(result)
+  }
 }

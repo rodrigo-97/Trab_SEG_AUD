@@ -1,21 +1,28 @@
-const express = require('express')
-const CRUD    = require('./CRUD')
-
-
-/*
-* Servidor
-*/
-const PORTA = 1232
+const express     = require('express')
+const CRUD        = require('./CRUD')
+var   cors        = require ('cors')
+var   url         = require('url')
+const bodyParser  = require("body-parser");
+const PORTA = 8080
 const app   = express()
+
+
+
 app.listen(PORTA, ()=> console.log("Servidor iniciado na porta "+ PORTA))
-
-
-/*
-* Hash
-*/
 const crud  = new CRUD()
+app.use(cors())
+app.use(bodyParser())
 
 
+
+/**
+ * LOG
+ */
+
+app.get("/log", async (req, res) => {
+  const resultado = await crud.log()
+  res.send(resultado)
+})
 
 app.get("/", async (req, res) => {
   const resultado = await crud.listarPessoas()
@@ -28,14 +35,21 @@ app.get("/pessoa", async (req, res) => {
 });
 
 app.post('/incluir', async function (req, res) {
-  res.send(crud.incluir(req.query.nome, req.query.cpf, req.query.senha))
+  const nome  = req.body.nome
+  const cpf   = req.body.cpf
+  const senha = req.body.senha
+  res.send(crud.incluir(nome, cpf, senha))
 });
 
-app.delete('/remover', async function (req, res) {
-  console.log(req.query.id)
-  res.send(crud.remover(req.query.id));
+app.post('/remover', async function (req, res) {
+  const id    = req.body.id
+  res.send(crud.remover(id));
 });
 
 app.put('/atualizar', async function (req, res) {
-  res.send(crud.atualizar(req.query.nome, req.query.cpf, req.query.senha, req.query.id));
+  const nome  = req.body.nome
+  const cpf   = req.body.cpf
+  const senha = req.body.senha
+  const id    = req.body.id
+  res.send(crud.atualizar(nome, cpf, senha, id));
 });

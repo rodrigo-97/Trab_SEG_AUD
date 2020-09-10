@@ -29,7 +29,7 @@ module.exports = class DB {
 
   async findAll() {
     try {
-      const text = "SELECT * FROM pessoas";
+      const text = "SELECT * FROM pessoas ORDER BY nome ASC";
 
       this.conectar();
       const result = await this.client.query(text);
@@ -140,6 +140,24 @@ module.exports = class DB {
       await this.client.query(text);
 
       return "alterado com sucesso"
+    } catch (error) {
+      return JSON.stringify({
+        "log do erro": `${error}`,
+        mensagem: "Houve algum problema com a conexão com o banco de dados =/",
+      });
+    } finally {
+      this.fecharConexao();
+    }
+  }
+
+  async log () {
+    try {
+      this.conectar();
+
+      const dataAtual = Date ().toString()
+      const result = await this.client.query(`select * from log`)
+
+      return result.rows
     } catch (error) {
       return JSON.stringify({
         "log do erro": `${error}`,
